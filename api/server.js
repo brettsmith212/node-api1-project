@@ -25,7 +25,8 @@ server.get("/api/users/:id", (req, res) => {
   let { id } = req.params;
   findById(id)
     .then((user) => {
-      if (user === null) {
+      console.log(user);
+      if (!user) {
         res
           .status(404)
           .json({ message: "The user with the specified ID does not exist" });
@@ -69,7 +70,7 @@ server.put("/api/users/:id", async (req, res) => {
 
   try {
     let user = await findById(id);
-    if (user === null) {
+    if (!user) {
       res
         .status(404)
         .json({ message: "The user with the specified ID does not exist" });
@@ -98,7 +99,7 @@ server.delete("/api/users/:id", async (req, res) => {
   try {
     let user = await findById(id);
     console.log(user);
-    if (user === null) {
+    if (!user) {
       res
         .status(404)
         .json({ message: "The user with the specified ID does not exist" });
