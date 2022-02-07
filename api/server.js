@@ -63,4 +63,33 @@ server.post("/api/users", (req, res) => {
   }
 });
 
+server.put("/api/users/:id", async (req, res) => {
+  let body = req.body;
+  let { id } = req.params;
+
+  try {
+    let user = await findById(id);
+    if (user === null) {
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist" });
+      return;
+    }
+
+    if (!body.name || !body.bio) {
+      res
+        .status(400)
+        .json({ message: "Please provide name and bio for the user" });
+      return;
+    }
+
+    let newUser = await update(id, body);
+    res.status(200).json(newUser);
+  } catch (e) {
+    res
+      .status(500)
+      .json({ message: "The user information could not be modified" });
+  }
+});
+
 module.exports = server; // EXPORT YOUR SERVER instead of {}
