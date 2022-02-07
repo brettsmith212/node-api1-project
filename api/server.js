@@ -92,4 +92,24 @@ server.put("/api/users/:id", async (req, res) => {
   }
 });
 
+server.delete("/api/users/:id", async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    let user = await findById(id);
+    console.log(user);
+    if (user === null) {
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist" });
+      return;
+    }
+
+    let deletedUser = await remove(id);
+    res.status(200).json(deletedUser);
+  } catch (e) {
+    res.status(500).json({ message: "The user could not be removed" });
+  }
+});
+
 module.exports = server; // EXPORT YOUR SERVER instead of {}
